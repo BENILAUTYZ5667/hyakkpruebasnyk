@@ -1,0 +1,719 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔎 XSS DOM-BASED 🔎</title>
+</head>
+<body>
+    <h1>🔎 CAMPOS DE BUSQUEDA VULNERABLES A XSS DOM-BASED 🔎</h1>
+
+    <a href="/"><button>VOLVER MANITOS AL HOME</button></a>
+
+    <!-- Nivel 1: No sanitization -->
+    <form id="form1">
+        <div>
+            <img src="/static/images/xss_dom_nivel1.jpg" alt="Imagen Nivel 1" style="width: 150px; height: 150px;">
+            <label for="q1">XSS DOM LEVEL 1 (innerHTML):</label>
+            <input type="text" id="q1" name="q1" />
+            <button type="button" onclick="xssLevel1()">Submit</button>
+            <p id="result1"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 2: Filtrado de "script" y "alert" -->
+    <form id="form2">
+        <div>
+            <img src="/static/images/xss_dom_nivel2.jpg" alt="Imagen Nivel 2" style="width: 150px; height: 150px;">
+            <label for="q2">XSS DOM LEVEL 2 (document.write):</label>
+            <input type="text" id="q2" name="q2" />
+            <button type="button" onclick="xssLevel2()">Submit</button>
+            <p id="result2"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 3: Filtrado de "script", "alert" y caracteres especiales -->
+    <form id="form3">
+        <div>
+            <img src="/static/images/xss_dom_nivel3.jpg" alt="Imagen Nivel 3" style="width: 150px; height: 150px;">
+            <label for="q3">XSS DOM LEVEL 3 (location.href):</label>
+            <input type="text" id="q3" name="q3" />
+            <button type="button" onclick="xssLevel3()">Submit</button>
+            <p id="result3"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 4: Filtrado más completo -->
+    <form id="form4">
+        <div>
+            <img src="/static/images/xss_dom_nivel4.jpg" alt="Imagen Nivel 4" style="width: 150px; height: 150px;">
+            <label for="q4">XSS DOM LEVEL 4 (eval):</label>
+            <input type="text" id="q4" name="q4" />
+            <button type="button" onclick="xssLevel4()">Submit</button>
+            <p id="result4"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 5: Escape de HTML -->
+    <form id="form5">
+        <div>
+            <img src="/static/images/xss_dom_nivel5.jpg" alt="Imagen Nivel 5" style="width: 150px; height: 150px;">
+            <label for="q5">XSS DOM LEVEL 5 (setTimeout):</label>
+            <input type="text" id="q5" name="q5" />
+            <button type="button" onclick="xssLevel5()">Submit</button>
+            <p id="result5"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 6: Sanitización avanzada -->
+    <form id="form6">
+        <div>
+            <img src="/static/images/xss_dom_nivel6.jpg" alt="Imagen Nivel 6" style="width: 150px; height: 150px;">
+            <label for="q6">XSS DOM LEVEL 6 (setInterval):</label>
+            <input type="text" id="q6" name="q6" />
+            <button type="button" onclick="xssLevel6()">Submit</button>
+            <p id="result6"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 7: Sanitización con librería Bleach -->
+    <form id="form7">
+        <div>
+            <img src="/static/images/xss_dom_nivel7.jpg" alt="Imagen Nivel 7" style="width: 150px; height: 150px;">
+            <label for="q7">XSS DOM LEVEL 7 (Function constructor):</label>
+            <input type="text" id="q7" name="q7" />
+            <button type="button" onclick="xssLevel7()">Submit</button>
+            <p id="result7"></p>
+        </div>
+    </form>
+
+    <!-- Nivel 8: Sanitización estricta con Bleach -->
+    <form id="form8">
+        <div>
+            <img src="/static/images/xss_dom_nivel8.jpg" alt="Imagen Nivel 1" style="width: 150px; height: 150px;">
+            <label for="q8">XSS DOM LEVEL 8 (innerHTML with sanitization):</label>
+            <input type="text" id="q8" name="q8" />
+            <button type="button" onclick="xssLevel8()">Submit</button>
+            <p id="result8"></p>
+        </div>
+    </form>
+
+    <script>
+        // Nivel 1: No sanitization
+        function xssLevel1() {
+            var input = document.getElementById('q1').value;
+            document.getElementById('result1').innerHTML = '<h3>Busque este elemento manito:</h3><img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA"><a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E' + input + '">Click para verlo</a>';
+        }
+
+        // Nivel 2: Filtrado de "script" y "alert"
+        function xssLevel2() {
+            var input = document.getElementById('q2').value;
+            input = input.replace(/script|alert/gi, '');
+            document.getElementById('result2').innerHTML = document.write('<h3>Busque este elemento manito:</h3><img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA"><a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E' + input + '">Click para verlo</a>');
+        }
+
+        // Nivel 3: Filtrado de "script", "alert" y caracteres especiales
+        function xssLevel3() {
+            var input = document.getElementById('q3').value;
+            input = input.replace(/script|alert|<|>|'|"/gi, '');
+
+            // Creamos un enlace <a> y cambiamos su atributo href
+            var link = document.createElement('a');
+            link.href = 'https://macabro99.pythonanywhere.com/retos-xss-dom' + input;
+            document.getElementById('result3').innerHTML = '<h3>Busque este elemento manito:</h3><img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA"><a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E" target="blank"'+ input + '>Click para verlo</a>';
+
+        }
+
+        // Nivel 4: Filtrado más completo
+        function xssLevel4() {
+            var input = document.getElementById('q4').value;
+            input = input.replace(/script|alert|javascrscriptipt|javascript|JaVaScRiPt|<|>|'|"|onerror|onload/gi, '');
+            document.getElementById('result4').innerHTML = '<h3>Busque este elemento manito:</h3><img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA"><a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E" target="blank"'+ input + '>Click para verlo</a>';
+            eval(input);
+        }
+
+        // Nivel 5: Escape de HTML
+        function xssLevel5() {
+            var input = document.getElementById('q5').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/script|javascript|alert|onmouseover|onerror|onclick|onfocus|onload/g, '');
+
+            // Construimos el HTML
+            var htmlContent = '<h3>Busque este elemento manito:</h3>' +
+                              '<img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA">' +
+                              '<a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E" target="blank"' + input + '>Click para verlo</a>';
+
+            // Asignamos el HTML al elemento con id "result1"
+            eval('document.getElementById("result5").innerHTML = `' + htmlContent + '`;');
+
+            // Evaluamos el input
+            setTimeout(function() {
+                eval(input);
+            }, 1000);
+        }
+
+        // Nivel 6: Sanitización avanzada usando setinterval
+        function xssLevel6() {
+            var input = document.getElementById('q6').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/script|javascript|alert|onmouonmouseoverseover|onmouseover|oneonerrorrror|onerror|onclonclickick|onclick|onfonfocusocus|onfocus|onlonloadoad|onload|onmoonmouseupuseup|onmouseup/g, '');
+            // Construimos el HTML
+            var htmlContent = '<h3>Busque este elemento manito:</h3>' +
+                              '<img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA">' +
+                              '<a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E" target="blank"' + input + '>Click para verlo</a>';
+
+            // Alternar visibilidad del contenedor cada 500 milisegundos
+            setInterval(function() {
+                var resultContainer = document.getElementById("result6");
+                resultContainer.style.visibility = (resultContainer.style.visibility === 'hidden' ? 'visible' : 'hidden');
+                resultContainer.innerHTML = htmlContent;
+            }, 500);
+        }
+
+        // Nivel 7: Sanitización estricta usando funcion
+        function xssLevel7() {
+            var input = document.getElementById('q7').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/scrscriptipt|script|ScRiPt|javasjavascriptcript|javascript|JaVaScRiPt|alert|AleRt|onmouonmouseoverseover|onmouseover|OnMoUsEoVeR|oneonerrorrror|onerror|OnErRoR|onclonclickick|onclick|OnClIcK|onfonfocusocus|onfocus|OnFoCuS|onlonloadoad|onload|OnLoAd|onmoonmouseupuseup|onmouseup|OnMoUsEuP/g, '').replace(/"/g, "\'").replace(/'/g, "\"");
+            // Construimos el HTML
+            var htmlContent = '<h3>Busque este elemento manito:</h3>' +
+                            '<img src="https://www.cronista.com/files/image/717/717328/6568b5179ee11.jpg" width="300" height="300" alt="BANANA">' +
+                            '<a href="https://macabro99.pythonanywhere.com/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E" target="blank"' + input + '>Click para verlo</a>';
+
+            // Asignamos el HTML al elemento con id "result1"
+            var funcEval = new Function(`
+                document.getElementById("result7").innerHTML = \`${htmlContent}\`;
+            `);
+
+            funcEval();
+        }
+
+        // Nivel 8: Sanitización estricta con Bleach
+        function xssLevel8() {
+            var input = document.getElementById('q8').value;
+            // Simulación de una sanitización avanzada con Bleach
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+            document.getElementById('result8').innerHTML = input;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!--FUNCIONA PERFECTO, SOLO ESTOY ACOMODANDO-->
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔎 DOM-BASED XSS VULNERABILITIES 🔎</title>
+</head>
+<body>
+    <h1>🔎 DOM-BASED XSS VULNERABILITIES 🔎</h1>
+
+    <a href="/"><button>VOLVER MANITOS AL HOME</button></a>
+
+
+    <form id="form1">
+        <div>
+            <label for="q1">XSS DOM LEVEL 1 (innerHTML):</label>
+            <input type="text" id="q1" name="q1" />
+            <button type="button" onclick="xssLevel1()">Submit</button>
+            <p id="result1"></p>
+        </div>
+    </form>
+
+
+    <form id="form2">
+        <div>
+            <label for="q2">XSS DOM LEVEL 2 (document.write):</label>
+            <input type="text" id="q2" name="q2" />
+            <button type="button" onclick="xssLevel2()">Submit</button>
+            <p id="result2"></p>
+        </div>
+    </form>
+
+
+    <form id="form3">
+        <div>
+            <label for="q3">XSS DOM LEVEL 3 (location.href):</label>
+            <input type="text" id="q3" name="q3" />
+            <button type="button" onclick="xssLevel3()">Submit</button>
+            <p id="result3"></p>
+        </div>
+    </form>
+
+
+    <form id="form4">
+        <div>
+            <label for="q4">XSS DOM LEVEL 4 (eval):</label>
+            <input type="text" id="q4" name="q4" />
+            <button type="button" onclick="xssLevel4()">Submit</button>
+            <p id="result4"></p>
+        </div>
+    </form>
+
+
+    <form id="form5">
+        <div>
+            <label for="q5">XSS DOM LEVEL 5 (setTimeout):</label>
+            <input type="text" id="q5" name="q5" />
+            <button type="button" onclick="xssLevel5()">Submit</button>
+            <p id="result5"></p>
+        </div>
+    </form>
+
+
+    <form id="form6">
+        <div>
+            <label for="q6">XSS DOM LEVEL 6 (setInterval):</label>
+            <input type="text" id="q6" name="q6" />
+            <button type="button" onclick="xssLevel6()">Submit</button>
+            <p id="result6"></p>
+        </div>
+    </form>
+
+
+    <form id="form7">
+        <div>
+            <label for="q7">XSS DOM LEVEL 7 (Function constructor):</label>
+            <input type="text" id="q7" name="q7" />
+            <button type="button" onclick="xssLevel7()">Submit</button>
+            <p id="result7"></p>
+        </div>
+    </form>
+
+
+    <form id="form8">
+        <div>
+            <label for="q8">XSS DOM LEVEL 8 (innerHTML with sanitization):</label>
+            <input type="text" id="q8" name="q8" />
+            <button type="button" onclick="xssLevel8()">Submit</button>
+            <p id="result8"></p>
+        </div>
+    </form>
+
+    <script>
+        // Nivel 1: No sanitization
+        function xssLevel1() {
+            var input = document.getElementById('q1').value;
+            document.getElementById('result1').innerHTML = input;
+        }
+
+        // Nivel 2: Filtrado de "script" y "alert"
+        function xssLevel2() {
+            var input = document.getElementById('q2').value;
+            input = input.replace(/script|alert/gi, '');
+            document.write('<h3>Busque este elemento manito:</h3><a href="https://9000-idx-p4im0nproyect-1716231750250.cluster-qhrn7lb3szcfcud6uanedbkjnm.cloudworkstations.dev/retos-xss-dom?q1=%22%3E%3Cscript%3Ewindow.location.href+%3D+%27https%3A%2F%2Fwww.google.com%27%3B%3C%2Fscript%3E' + input + '">Click para verlo</a>');
+        }
+
+        // Nivel 3: Filtrado de "script", "alert" y caracteres especiales
+        function xssLevel3() {
+            var input = document.getElementById('q3').value;
+            input = input.replace(/script|alert|<|>|'|"/gi, '');
+            location.href = 'javascript:' + input;
+        }
+
+        // Nivel 4: Filtrado más completo
+        function xssLevel4() {
+            var input = document.getElementById('q4').value;
+            input = input.replace(/script|alert|javascript|<|>|'|"|onerror|onload/gi, '');
+            eval(input);
+        }
+
+        // Nivel 5: Escape de HTML
+        function xssLevel5() {
+            var input = document.getElementById('q5').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            setTimeout(input, 1000);
+        }
+
+        // Nivel 6: Sanitización avanzada
+        function xssLevel6() {
+            var input = document.getElementById('q6').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            setInterval(input, 1000);
+        }
+
+        // Nivel 7: Sanitización con librería Bleach
+        function xssLevel7() {
+            var input = document.getElementById('q7').value;
+            var func = new Function(input.replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+            func();
+        }
+
+        // Nivel 8: Sanitización estricta con Bleach
+        function xssLevel8() {
+            var input = document.getElementById('q8').value;
+            // Simulación de una sanitización avanzada con Bleach
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+            document.getElementById('result8').innerHTML = input;
+        }
+    </script>
+</body>
+</html>-->
+
+
+
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔎 DOM-BASED XSS VULNERABILITIES 🔎</title>
+</head>
+<body>
+    <h1>🔎 DOM-BASED XSS VULNERABILITIES 🔎</h1>
+
+    <a href="/"><button>VOLVER MANITOS AL HOME</button></a>
+
+
+    <form id="form1">
+        <div>
+            <label for="q1">XSS DOM LEVEL 1 (innerHTML):</label>
+            <input type="text" id="q1" name="q1" />
+            <button type="button" onclick="xssLevel1()">Submit</button>
+            <p id="result1"></p>
+        </div>
+    </form>
+
+
+    <form id="form2">
+        <div>
+            <label for="q2">XSS DOM LEVEL 2 (document.write):</label>
+            <input type="text" id="q2" name="q2" />
+            <button type="button" onclick="xssLevel2()">Submit</button>
+            <p id="result2"></p>
+        </div>
+    </form>
+
+
+    <form id="form3">
+        <div>
+            <label for="q3">XSS DOM LEVEL 3 (location.href):</label>
+            <input type="text" id="q3" name="q3" />
+            <button type="button" onclick="xssLevel3()">Submit</button>
+            <p id="result3"></p>
+        </div>
+    </form>
+
+
+    <form id="form4">
+        <div>
+            <label for="q4">XSS DOM LEVEL 4 (eval):</label>
+            <input type="text" id="q4" name="q4" />
+            <button type="button" onclick="xssLevel4()">Submit</button>
+            <p id="result4"></p>
+        </div>
+    </form>
+
+
+    <form id="form5">
+        <div>
+            <label for="q5">XSS DOM LEVEL 5 (setTimeout):</label>
+            <input type="text" id="q5" name="q5" />
+            <button type="button" onclick="xssLevel5()">Submit</button>
+            <p id="result5"></p>
+        </div>
+    </form>
+
+
+    <form id="form6">
+        <div>
+            <label for="q6">XSS DOM LEVEL 6 (setInterval):</label>
+            <input type="text" id="q6" name="q6" />
+            <button type="button" onclick="xssLevel6()">Submit</button>
+            <p id="result6"></p>
+        </div>
+    </form>
+
+
+    <form id="form7">
+        <div>
+            <label for="q7">XSS DOM LEVEL 7 (Function constructor):</label>
+            <input type="text" id="q7" name="q7" />
+            <button type="button" onclick="xssLevel7()">Submit</button>
+            <p id="result7"></p>
+        </div>
+    </form>
+
+
+    <form id="form8">
+        <div>
+            <label for="q8">XSS DOM LEVEL 8 (innerHTML with sanitization):</label>
+            <input type="text" id="q8" name="q8" />
+            <button type="button" onclick="xssLevel8()">Submit</button>
+            <p id="result8"></p>
+        </div>
+    </form>
+
+    <script>
+        // Nivel 1: No sanitization
+        function xssLevel1() {
+            var input = document.getElementById('q1').value;
+            document.write(input);
+        }
+
+        // Nivel 2: Filtrado de "script" y "alert"
+        function xssLevel2() {
+            var input = document.getElementById('q2').value;
+            input = input.replace(/script|alert/gi, '');
+            document.write(input);
+        }
+
+        // Nivel 3: Filtrado de "script", "alert" y caracteres especiales
+        function xssLevel3() {
+            var input = document.getElementById('q3').value;
+            input = input.replace(/script|alert|<|>|'|"/gi, '');
+            document.write(input);
+        }
+
+        // Nivel 4: Filtrado más completo
+        function xssLevel4() {
+            var input = document.getElementById('q4').value;
+            input = input.replace(/script|alert|javascript|<|>|'|"|onerror|onload/gi, '');
+            document.write(input);
+        }
+
+        // Nivel 5: Escape de HTML
+        function xssLevel5() {
+            var input = document.getElementById('q5').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            document.write(input);
+        }
+
+        // Nivel 6: Sanitización avanzada
+        function xssLevel6() {
+            var input = document.getElementById('q6').value;
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            document.write(input);
+        }
+
+        // Nivel 7: Sanitización con librería Bleach
+        function xssLevel7() {
+            var input = document.getElementById('q7').value;
+            var func = new Function(input.replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+            func();
+        }
+
+        // Nivel 8: Sanitización estricta con Bleach
+        function xssLevel8() {
+            var input = document.getElementById('q8').value;
+            // Simulación de una sanitización avanzada con Bleach
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+            document.getElementById('result8').innerHTML = input;
+        }
+    </script>
+</body>
+</html>-->
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔎 DOM XSS VULNERABILITIES 🔎</title>
+    <script>
+        function displayResult(level, input) {
+            document.getElementById(`result${level}`).innerHTML = input;
+        }
+    </script>
+</head>
+<body>
+    <h1>🔎 DOM XSS VULNERABILITIES 🔎</h1>
+    <a href="/"><button>VOLVER MANITOS AL HOME</button></a>
+
+
+    <div>
+        <label for="input1">DOM XSS Nivel 1 (No sanitization):</label>
+        <input type="text" id="input1" oninput="displayResult(1, this.value)">
+        <div id="result1"></div>
+    </div>
+    <div>
+        <label for="input2">DOM XSS Nivel 2 (Filtro "script" y "alert"):</label>
+        <input type="text" id="input2" oninput="displayResult(2, this.value)">
+        <div id="result2"></div>
+    </div>
+    <div>
+        <label for="input3">DOM XSS Nivel 3 (Filtro "script", "alert", "<", ">", '"', "'"):</label>
+        <input type="text" id="input3" oninput="displayResult(3, this.value)">
+        <div id="result3"></div>
+    </div>
+    <div>
+        <label for="input4">DOM XSS Nivel 4 (Filtro "script", "alert", "javascript", "<", ">", '"', "'", "onerror", "onload"):</label>
+        <input type="text" id="input4" oninput="displayResult(4, this.value)">
+        <div id="result4"></div>
+    </div>
+    <div>
+        <label for="input5">DOM XSS Nivel 5 (HTML escape):</label>
+        <input type="text" id="input5" oninput="displayResult(5, this.value)">
+        <div id="result5"></div>
+    </div>
+    <div>
+        <label for="input6">DOM XSS Nivel 6 (Avanzado HTML escape):</label>
+        <input type="text" id="input6" oninput="displayResult(6, this.value)">
+        <div id="result6"></div>
+    </div>
+    <div>
+        <label for="input7">DOM XSS Nivel 7 (Sanitización con librería Bleach):</label>
+        <input type="text" id="input7" oninput="displayResult(7, this.value)">
+        <div id="result7"></div>
+    </div>
+    <div>
+        <label for="input8">DOM XSS Nivel 8 (Estricta sanitización con Bleach):</label>
+        <input type="text" id="input8" oninput="displayResult(8, this.value)">
+        <div id="result8"></div>
+    </div>
+</body>
+</html>-->
+
+
+
+
+
+
+
+
+
+
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🔎 DOM-BASED XSS VULNERABILITIES 🔎</title>
+</head>
+<body>
+    <h1>🔎 DOM-BASED XSS VULNERABILITIES 🔎</h1>
+
+    <a href="/"><button>VOLVER MANITOS AL HOME</button></a>
+
+    <form id="form1">
+        <div>
+            <label for="q1">XSS DOM LEVEL 1 (innerHTML):</label>
+            <input type="text" id="q1" name="q1" />
+            <button type="button" onclick="xssLevel1()">Submit</button>
+            <p id="result1"></p>
+        </div>
+    </form>
+
+    <form id="form2">
+        <div>
+            <label for="q2">XSS DOM LEVEL 2 (document.write):</label>
+            <input type="text" id="q2" name="q2" />
+            <button type="button" onclick="xssLevel2()">Submit</button>
+            <p id="result2"></p>
+        </div>
+    </form>
+
+    <form id="form3">
+        <div>
+            <label for="q3">XSS DOM LEVEL 3 (location.href):</label>
+            <input type="text" id="q3" name="q3" />
+            <button type="button" onclick="xssLevel3()">Submit</button>
+            <p id="result3"></p>
+        </div>
+    </form>
+
+    <form id="form4">
+        <div>
+            <label for="q4">XSS DOM LEVEL 4 (eval):</label>
+            <input type="text" id="q4" name="q4" />
+            <button type="button" onclick="xssLevel4()">Submit</button>
+            <p id="result4"></p>
+        </div>
+    </form>
+
+    <form id="form5">
+        <div>
+            <label for="q5">XSS DOM LEVEL 5 (setTimeout):</label>
+            <input type="text" id="q5" name="q5" />
+            <button type="button" onclick="xssLevel5()">Submit</button>
+            <p id="result5"></p>
+        </div>
+    </form>
+
+    <form id="form6">
+        <div>
+            <label for="q6">XSS DOM LEVEL 6 (setInterval):</label>
+            <input type="text" id="q6" name="q6" />
+            <button type="button" onclick="xssLevel6()">Submit</button>
+            <p id="result6"></p>
+        </div>
+    </form>
+
+    <form id="form7">
+        <div>
+            <label for="q7">XSS DOM LEVEL 7 (Function constructor):</label>
+            <input type="text" id="q7" name="q7" />
+            <button type="button" onclick="xssLevel7()">Submit</button>
+            <p id="result7"></p>
+        </div>
+    </form>
+
+    <form id="form8">
+        <div>
+            <label for="q8">XSS DOM LEVEL 8 (innerHTML with sanitization):</label>
+            <input type="text" id="q8" name="q8" />
+            <button type="button" onclick="xssLevel8()">Submit</button>
+            <p id="result8"></p>
+        </div>
+    </form>
+
+    <script>
+        function xssLevel1() {
+            var input = document.getElementById('q1').value;
+            document.getElementById('result1').innerHTML = input;
+        }
+
+        function xssLevel2() {
+            var input = document.getElementById('q2').value;
+            document.write(input);
+        }
+
+        function xssLevel3() {
+            var input = document.getElementById('q3').value;
+            location.href = 'javascript:' + input;
+        }
+
+        function xssLevel4() {
+            var input = document.getElementById('q4').value;
+            eval(input);
+        }
+
+        function xssLevel5() {
+            var input = document.getElementById('q5').value;
+            setTimeout(input, 1000);
+        }
+
+        function xssLevel6() {
+            var input = document.getElementById('q6').value;
+            setInterval(input, 1000);
+        }
+
+        function xssLevel7() {
+            var input = document.getElementById('q7').value;
+            var func = new Function(input);
+            func();
+        }
+
+        function xssLevel8() {
+            var input = document.getElementById('q8').value;
+            // Basic sanitization
+            input = input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            document.getElementById('result8').innerHTML = input;
+        }
+    </script>
+</body>
+</html>-->
